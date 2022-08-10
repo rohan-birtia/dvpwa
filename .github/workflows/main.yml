@@ -2,14 +2,19 @@ on: [push]
 
 jobs:
   Secret_scanning:
-    runs-on:  ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        ref: ${{ github.head_ref }} // necessary for pull request workflow trigger
-    - name: trufflehog-actions-scan
-      uses: edplato/trufflehog-actions-scan@master
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: TruffleHog OSS
+        uses: trufflesecurity/trufflehog@v3.4.3
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug
   dependency_analysis:
     runs-on:  ubuntu-latest
     name: Test dependencies for security flaws
