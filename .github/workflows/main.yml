@@ -1,6 +1,15 @@
 on: [push]
 
 jobs:
+  Secret_scanning:
+    runs-on:  ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        ref: ${{ github.head_ref }} // necessary for pull request workflow trigger
+    - name: trufflehog-actions-scan
+      uses: edplato/trufflehog-actions-scan@master
   dependency_analysis:
     runs-on:  ubuntu-latest
     name: Test dependencies for security flaws
